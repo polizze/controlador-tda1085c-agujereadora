@@ -1,5 +1,5 @@
 LTspice 26.1.1 for Windows
-Circuit: D:\Tomás\Desktop\all\utn\máquinas\etapa1a_fuente_tda1085c.net
+Circuit: D:\TomÃƒÂ¡s\Desktop\all\utn\mÃƒÂ¡quinas\etapa1a_fuente_tda1085c.net
 Start Time: Wed Nov 11 00:08:51 2026
 solver = Normal
 Maximum thread count: 12
@@ -12,8 +12,8 @@ Total elapsed time: 0.230 seconds.
 Total iterations: 88451
 
 Files loaded:
-D:\Tomás\Desktop\all\utn\máquinas\etapa1a_fuente_tda1085c.net
-C:\Users\Tomás\AppData\Local\LTspice\lib\cmp\standard.dio
+D:\TomÃƒÂ¡s\Desktop\all\utn\mÃƒÂ¡quinas\etapa1a_fuente_tda1085c.net
+C:\Users\TomÃƒÂ¡s\AppData\Local\LTspice\lib\cmp\standard.dio
 
 vcc1_avg: AVG(V(VCC_9K4_15MA))=9.67841046027 FROM 1.1 TO 1.5
 vcc1_pp: PP(V(VCC_9K4_15MA))=0.548305511475 FROM 1.1 TO 1.5

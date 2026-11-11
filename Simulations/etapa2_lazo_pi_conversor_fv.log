@@ -1,0 +1,27 @@
+LTspice 26.1.1 for Windows
+Circuit: D:\TomÃƒÂ¡s\Desktop\all\utn\mÃƒÂ¡quinas\Simulations\etapa2_lazo_pi_conversor_fv.net
+Start Time: Wed Nov 11 13:22:22 2026
+solver = Normal
+Maximum thread count: 12
+tnom = 27
+temp = 27
+method = trap
+Direct Newton iteration succeeded in finding operating point.
+Total elapsed time: 0.340 seconds.
+Total iterations: 78305
+
+Files loaded:
+D:\TomÃƒÂ¡s\Desktop\all\utn\mÃƒÂ¡quinas\Simulations\etapa2_lazo_pi_conversor_fv.net
+C:\Users\TomÃƒÂ¡s\AppData\Local\LTspice\lib\cmp\standard.dio
+
+vpin12_pk: MAX(V(PIN12_TACHO))=8.79114151001 FROM 0.8 TO 1.2
+i_tacho_pk_ma: MAX(I(R12)*1000)=0.842414563522 FROM 0.8 TO 1.2
+vpin4_2500rpm_avg: AVG(V(PIN4_VTACHO))=5.140092377 FROM 0.8 TO 1.2
+vpin4_2500rpm_pp: PP(V(PIN4_VTACHO))=0.239813327789 FROM 0.8 TO 1.2
+vpin5_set_max: AVG(V(PIN5_VSET))=5.12198352814 FROM 0.8 TO 1.2
+vpin5_set_min: AVG(V(N_POT_BOT))=0.923636376856 FROM 0.8 TO 1.2
+vpin16_no_load: AVG(V(PIN16_COMP))=2.9292345047 FROM 0.45 TO 0.58
+vpin16_under_load: AVG(V(PIN16_COMP))=4.45839602663 FROM 0.9 TO 1.08
+rpm_steady_before: AVG(V(V_RPM_CLOSED_LOOP)*1000)=2489.84932899 FROM 0.45 TO 0.58
+rpm_dip_min: MIN(V(V_RPM_CLOSED_LOOP)*1000)=2434.7114563 FROM 0.6 TO 0.8
+rpm_steady_recovered: AVG(V(V_RPM_CLOSED_LOOP)*1000)=2489.6211498 FROM 0.95 TO 1.08

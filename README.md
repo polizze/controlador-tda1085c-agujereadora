@@ -4,7 +4,7 @@
 [![KiCad 10.0](https://img.shields.io/badge/EDA-KiCad%2010.0-blue.svg)](Hardware/TDA1085C_Controller/)
 [![LTspice 26.1](https://img.shields.io/badge/Simulación-LTspice-orange.svg)](Simulations/)
 
-Proyecto de **Hardware Libre** para el diseño electrónico, simulación SPICE (**LTspice**) y diseño de circuito impreso (**KiCad**) de un controlador de velocidad a lazo cerrado proporcional-integral (PI) por ángulo de fase basado en el circuito integrado **`TDA1085C`**, destinado a adaptar un motor universal de lavarropas (**Askoll C.E.SET. `MCA 52/64-148/ALL7`**) en una **agujereadora de banco de acople directo** (regulando entre **$400\text{ RPM}$ y $2.500\text{ RPM}$** con alto torque a bajas vueltas).
+Proyecto de **Hardware Libre** para el diseño electrónico, simulación SPICE (**LTspice**) y diseño de circuito impreso (**KiCad**) de un controlador de velocidad a lazo cerrado proporcional-integral (PI) por ángulo de fase basado en el circuito integrado **`TDA1085C`**, destinado a adaptar un motor universal de lavarropas (**Askoll / C.E.SET. `MCA 52/64-148/ALL7`**) en una **agujereadora de banco de acople directo** (regulando entre **$400\text{ RPM}$ y $2.500\text{ RPM}$** con alto torque a bajas vueltas).
 
 ---
 
@@ -22,17 +22,17 @@ Proyecto de **Hardware Libre** para el diseño electrónico, simulación SPICE (
 ```text
 .
 ├── Docs/                                   # Documentación técnica, relevamiento fotográfico y cálculos
-│   ├── Calculos_y_Notas_Diseno.md          # Memoria de cálculo detallada (Gate, F/V, 400-2500 RPM, térmica)
+│   ├── Calculos_y_Notas_Diseno.md          # Memoria de cálculo actualizada (Pinout real, R=8.6Ω, Tacho=73Ω, Lazo PI)
 │   ├── TDA1085C-D.PDF                      # Hoja de datos oficial ON Semiconductor TDA1085C
 │   ├── BTA12.PDF                           # Hoja de datos oficial STMicroelectronics BTA12 / BTB12-600BW
-│   ├── conector.jpg                        # Relevamiento de bornera de 7 pines del motor Askoll
+│   ├── conector.jpg                        # Relevamiento de bornera de 7 pines del motor C.E.SET.
 │   ├── filtro emi.jpg                      # Filtro EMI pasivo de entrada FLCR47050 (16A)
 │   ├── placadearriba.jpg                   # Vista superior placa donante E.G.O.
 │   └── placadeabajo.jpg                    # Vista inferior placa donante E.G.O.
 ├── Hardware/                               # Diseño de esquemático, PCB y fabricación en KiCad 10
 │   ├── TDA1085C_Controller/
 │   │   ├── TDA1085C_Controller.kicad_pro   # Proyecto KiCad con Netclasses (HV_AC clearance 3.0mm)
-│   │   ├── TDA1085C_Controller.kicad_sch   # Esquemático completo del controlador TDA1085C
+│   │   ├── TDA1085C_Controller.kicad_sch   # Esquemático completo del controlador TDA1085C (Rev 2.1)
 │   │   ├── TDA1085C_Controller.kicad_pcb   # Layout PCB (Star Ground en MT1 + barrera > 3.0mm)
 │   │   ├── TDA1085C_Controller.kicad_dru   # Reglas DRC personalizadas de alta tensión y potencia
 │   │   ├── fp-lib-table                    # Tabla de librería de huellas locales del proyecto
@@ -42,13 +42,16 @@ Proyecto de **Hardware Libre** para el diseño electrónico, simulación SPICE (
 │   │   ├── TDA1085C_Controller.svg         # Esquemático vectorial SVG
 │   │   ├── PCB_TDA1085C_Preview.pdf        # Layout PCB en PDF
 │   │   └── PCB_TDA1085C_Preview.svg        # Layout PCB vectorial SVG
-│   └── BOM_KiCad.csv                       # Lista de materiales exportada desde KiCad
+│   └── BOM_KiCad.csv                       # Lista de materiales exportada desde KiCad + parámetros medidos
 ├── Simulations/                            # Simulaciones SPICE verificadas en LTspice 26.1
-│   ├── tda1085c_controlador_completo_btb12.asc  # Esquemático maestro actualizado (BTB12-600BW, R_G=150R, C_VCC=220uF)
+│   ├── etapa2_lazo_pi_conversor_fv.asc          # Modelo dinámico del Conversor F-V (Tacho 73Ω) y Lazo PI (Pin 16)
+│   ├── etapa2_lazo_pi_conversor_fv.net          # Netlist SPICE del Conversor F-V y Lazo PI
+│   ├── etapa2_lazo_pi_conversor_fv.log          # Mediciones del transitorio bajo carga del Lazo PI
+│   ├── tda1085c_controlador_completo_btb12.asc  # Esquemático maestro completo (Estator 2.1Ω + Rotor 6.5Ω + BTB12)
 │   ├── tda1085c_controlador_completo_btb12.net  # Netlist SPICE ejecutable del modelo completo
-│   ├── tda1085c_controlador_completo_btb12.log  # Resultados medidos (.meas) de simulación
+│   ├── tda1085c_controlador_completo_btb12.log  # Resultados medidos (.meas) del modelo maestro
 │   ├── etapa1a_fuente_tda1085c.asc              # Análisis de fuente sin transformador y estrés de carga
-│   ├── etapa1b_conversor_fv_tacho.asc           # Análisis del conversor F/V y escalado 400-2500 RPM
+│   ├── etapa1b_conversor_fv_tacho.asc           # Análisis del conversor F/V (400 RPM vs 2.500 RPM)
 │   └── etapa1c_triac_snubber_motor.asc          # Análisis de conmutación inductiva, Snubber y dV/dt
 ├── .gitignore                              # Reglas de exclusión estándar para KiCad y LTspice
 ├── init_repo.sh                            # Script Bash de inicialización y estructuración Git
@@ -57,151 +60,136 @@ Proyecto de **Hardware Libre** para el diseño electrónico, simulación SPICE (
 
 ---
 
-## 2. Especificaciones de Hardware y Diagramas de Conexión
+## 2. Parámetros Físicos Medidos y Pinout Definitivo del Motor
 
-### A. Motor Universal (`Askoll C.E.SET. MCA 52/64-148/ALL7`)
-* **Datos nominales:** $220\text{–}240\text{ V AC}$, $50\text{ Hz}$ | $1.5\text{ A}$ | $330\text{ W}$ (entrada) | $11.000\text{ RPM}$ (régimen nominal lavarropas).
+### A. Motor Universal (`Askoll / C.E.SET. MCA 52/64-148/ALL7`)
+* **Datos nominales de placa:** $220\text{–}240\text{ V AC}$, $50\text{ Hz}$ | $1.5\text{ A}$ | $330\text{ W}$ (entrada) | $11.000\text{ RPM}$.
 * **Rango de Operación en Agujereadora (Acople Directo):** **$400\text{ RPM}$ a $2.500\text{ RPM}$** para el $100\%$ del giro del potenciómetro de panel.
-* **Parámetros eléctricos equivalentes (Serie):** $R_{\text{tot}} \approx 5.2\text{ }\Omega$, $L_{\text{tot}} \approx 22\text{ mH}$, tacómetro AC de $8$ polos ($60\text{–}180\text{ }\Omega$, $\approx 2.5\text{ Vrms} / 1.000\text{ RPM}$).
+* **Parámetros de Potencia Medidos en Banco:**
+  * **Resistencia del Estator (Campo):** $R_{\text{estator}} = \mathbf{2.1\text{ }\Omega}$ *(medida entre **Pin 1** y **Pin 5**)*.
+  * **Resistencia del Rotor (Inducido / Armadura):** $R_{\text{rotor}} = \mathbf{6.5\text{ }\Omega}$ *(medida entre **Pin 2** y **Pin 6**)*.
+  * **Resistencia Total en Serie (DC):** $R_{\text{total}} = R_{\text{estator}} + R_{\text{rotor}} = \mathbf{8.6\text{ }\Omega}$.
+  * **Inductancia Total en Serie Estimada:** $L_{\text{total}} \approx \mathbf{25\text{ mH}\text{ a }30\text{ mH}}$ ($28\text{ mH}$ en simulación: $15\text{ mH}$ campo + $13\text{ mH}$ inducido).
+* **Parámetros del Generador Tacométrico Medidos (Pines 3 y 4):**
+  * **Polos Magnéticos:** **$8\text{ polos}$** ($4$ pares de polos $\rightarrow 4$ ciclos AC por revolución).
+  * **Resistencia de la Bobina:** $R_{\text{tacho}} = \mathbf{73.0\text{ }\Omega}$.
+  * **Frecuencia a $2.500\text{ RPM}$ (Tope deseado):** $f_{\text{max}} = \mathbf{166.6\text{ Hz}}$ ($f_{\text{min}} = 26.67\text{ Hz}$ a $400\text{ RPM}$).
 
-#### Mapeo de la Bornera de 7 Pines (Conexión Serie — Giro Horario)
+### B. Pinout Definitivo de la Bornera de 7 Pines (de Izquierda a Derecha)
 
-| Pin Bornera | Color de Cable (Ficha Superior) | Componente Interno | Conexión en el Controlador |
+Se utiliza el mazo de cables inferior original que vincula los pines **1, 2, 5 y 6** para establecer la conexión en serie:
+
+| Pin Bornera (Izq. $\rightarrow$ Der.) | Color de Cable | Bobinado / Elemento Interno | Conexión en el Controlador (`MOTOR_OUT` / `TACHO`) |
 | :---: | :--- | :--- | :--- |
-| **Pin 1** | **Negro** | Extremo A del Campo (Estator) | **Puenteado con Pin 2** (une Campo y Rotor en serie) |
-| **Pin 2** | **Violeta** | Carbón Izquierdo (Rotor) | **Puenteado con Pin 1** |
-| **Pin 3** | **Rojo fino** | Generador Tacométrico (A) | Entrada `TACHO_AC` (`J3` Pin 1 $\rightarrow R_{12} = 10\text{ k}\Omega$) |
-| **Pin 4** | **Rojo fino** | Generador Tacométrico (B) | Masa de control `GND_CHIP` (`J3` Pin 2) |
-| **Pin 5** | **Gris** | Tap intermedio de campo | **No se usa** (dejar aislado) |
-| **Pin 6** | **Azul** | Extremo B del Campo + Protector Térmico | Línea `L2_AC_HOT` ($220\text{ V AC}$ Fase filtrada, `J1` Pin 3) |
-| **Pin 7** | **Naranja** | Carbón Derecho (Rotor) | Salida conmutada `MT2` del Triac (`J1` Pin 2) |
+| **Pin 1** | **Gris oscuro** | **Estator (Campo A)** | **Puente Serie:** Unir directamente con **Pin 2 (Violeta)** |
+| **Pin 2** | **Violeta** | **Rotor (Carbón Izquierdo)** | **Puente Serie:** Unir directamente con **Pin 1 (Gris oscuro)** |
+| **Pin 3** | **Rojo fino** | **Generador Tacométrico ($73.0\text{ }\Omega$)** | Entrada `TACHO_AC` en Bornera `J3` Pin 1 ($\rightarrow R_{12} = 10\text{ k}\Omega$) |
+| **Pin 4** | **Rojo fino** | **Generador Tacométrico ($73.0\text{ }\Omega$)** | Masa `GND_CHIP` en Bornera `J3` Pin 2 |
+| **Pin 5** | **Negro** | **Estator (Campo B)** | **Alimentación (`MOTOR_OUT`):** Conectar a Bornera `J1` Pin 3 (`L2_AC_HOT`) |
+| **Pin 6** | **Azul** | **Rotor (Carbón Derecho)** | **Alimentación (`MOTOR_OUT`):** Conectar a Bornera `J1` Pin 2 (`MT2` del Triac `BTB12-600BW`) |
+| **Pin 7** | **Gris claro** | **Estator (Tap o Térmico interno)** | **Sin uso** en esta configuración (dejar aislado) |
 
-### B. Diagrama de Bloques y Cableado General
+### C. Diagrama de Conexión en Serie y Bloques del Controlador
 
 ```mermaid
 flowchart LR
-    subgraph RED["Red 220V AC 50Hz"]
+    subgraph RED["Red 220V AC 50Hz + Filtro EMI FLCR47050"]
         L2["Fase (L2_AC_HOT)"]
         L1["Neutro (L1)"]
         PE["Tierra (PE)"]
-    end
-
-    subgraph EMI["Filtro EMI FLCR47050 + Fusible 4A"]
-        F_EMI["Filtro L-C Modo Común/Diferencial"]
     end
 
     subgraph PCB["PCB Controlador TDA1085C (Hardware/)"]
         STAR(("Pad MT1\n(Star Ground)"))
         Q1["Triac BTB12-600BW\n(I_GT = 50mA | Aleta Viva en MT2)\n+ Disipador 40x20x80mm Aislado"]
         SNUB["Snubber RC\n100Ω 1W + 100nF X2"]
-        PSU["Fuente Sin Transformador\n1N4007 + 2x 4.7kΩ 3W (Elevadas 5mm)\n+ C_VCC = 220µF/25V"]
-        U1["IC TDA1085C\nPin 8 = GND_CHIP (única pista desde MT1)\nPin 13 -> R_GATE 150Ω 1W\nPin 12 <- R12 10kΩ + C12 10nF"]
-        POT["Ajuste Velocidad (400-2500 RPM)\nPreset 50kΩ Multivuelta (RV1) en serie\ncon Potenciómetro Panel 10kΩ + R_min 2.2kΩ"]
+        PSU["Fuente Sin Transformador\n1N4007 + 2x 4.7kΩ 3W (Elevadas 5mm)\n+ C_VCC1 = 220µF/25V"]
+        U1["IC TDA1085C\nPin 8 = GND_CHIP (única pista desde MT1)\nPin 13 -> R_GATE1 150Ω 1W\nPin 12 <- R12 10kΩ + C12 10nF\nPin 16 -> Red PI (47kΩ + 1µF || 47nF)"]
+        POT["Consigna 400-2500 RPM\nPin 9 (+VCC) -> Preset 50kΩ Multivuelta (RV1)\n-> Pot. Panel 10kΩ (Pin 5) -> R_MIN1 2.2kΩ"]
     end
 
-    subgraph MOTOR["Motor Universal Askoll MCA 52/64-148/ALL7"]
-        P6["Pin 6 (Azul): Campo B + Térmico"]
-        P1_2["Pin 1 (Negro) === Pin 2 (Violeta)\nPuente Serie (Giro Horario)"]
-        P7["Pin 7 (Naranja): Carbón Derecho"]
-        TACHO["Pines 3 y 4 (Rojos): Tacómetro AC"]
-        CHASIS["Carcasa Metálica Motor + Agujereadora"]
+    subgraph MOTOR["Motor Universal C.E.SET. MCA 52/64 (R_tot = 8.6Ω, L = 25-30mH)"]
+        EST["Estator (Campo: 2.1Ω)\nPin 5 (Negro) a Pin 1 (Gris oscuro)"]
+        PUENTE["PUENTE SERIE\nPin 1 (Gris oscuro) === Pin 2 (Violeta)"]
+        ROT["Rotor (Armadura: 6.5Ω)\nPin 2 (Violeta) a Pin 6 (Azul)"]
+        TACHO["Pines 3 y 4 (Rojos)\nTacómetro AC: 73.0Ω | 8 Polos\n166.6 Hz @ 2.500 RPM"]
+        CHASIS["Carcasa Metálica Motor + Agujereadora\n(Pin 7 Gris claro: Aislado sin uso)"]
     end
 
-    L2 & L1 --> F_EMI
     PE --> CHASIS
-    F_EMI -- "L1 (Pista gruesa 3mm)" --> STAR
+    L1 -- "Pista gruesa 3.0mm (J1 Pin 1)" --> STAR
     STAR -- "MT1" --> Q1
     STAR -- "ÚNICA pista Star Ground" --> U1
-    F_EMI -- "L2_AC_HOT" --> P6
-    F_EMI -- "L2_AC_HOT" --> PSU
-    PSU -- "+15.2V (Pin 9/10)" --> U1
+    L2 -- "J1 Pin 3 (L2_MOT_PIN5)" --> EST
+    L2 -- "J1 Pin 4" --> PSU
+    PSU -- "+15.24V (Pin 9/10)" --> U1
     POT -- "Pin 5 (V_SET)" --> U1
     U1 -- "Pulso 88mA pk (R_G=150Ω 1W)" --> Q1
-    P6 --> P1_2 --> P7
-    Q1 -- "MT2 (Aleta Viva)" --> P7
+    EST --> PUENTE --> ROT
+    Q1 -- "J1 Pin 2 (MT2 -> Pin 6 Azul)" --> ROT
     Q1 --- SNUB --- STAR
-    TACHO -- "Señal AC (26.7 - 166.7 Hz)" --> U1
+    TACHO -- "J3 (Pines 3 y 4)" --> U1
 ```
 
-### C. Relevamiento Fotográfico del Hardware
+### D. Relevamiento Fotográfico del Hardware
 | Motor y Bornera (`Docs/conector.jpg`) | Filtro EMI (`Docs/filtro emi.jpg`) | Placa Superior (`Docs/placadearriba.jpg`) | Placa Inferior (`Docs/placadeabajo.jpg`) |
 | :---: | :---: | :---: | :---: |
 | ![Conector Motor](Docs/conector.jpg) | ![Filtro EMI](Docs/filtro%20emi.jpg) | ![Placa Arriba](Docs/placadearriba.jpg) | ![Placa Abajo](Docs/placadeabajo.jpg) |
 
 ---
 
-## 3. Decisiones de Ingeniería y Ajustes del `TDA1085C`
+## 3. Simulaciones SPICE Actualizadas (`LTspice 26.1.1`)
 
-1. **Etapa de Disparo de Gate para `BTB12-600BW` ($I_{GT} = 50\text{ mA}$):**
-   * Al tratarse de un Triac **Snubberless (`BW`)** de $50\text{ mA}$ de sensibilidad de compuerta, se dimensionó **`R_GATE1` en $150\text{ }\Omega\text{ (1 W)}$** (rango admisible $120\text{ }\Omega\text{ a }150\text{ }\Omega$) entre el Pin 13 y el Gate.
-   * En simulación ([`tda1085c_controlador_completo_btb12.log`](Simulations/tda1085c_controlador_completo_btb12.log)), el pulso de corriente alcanza **$87.9\text{ mA}$ pico** ($1.76 \times I_{GT}$), garantizando el encendido en el primer pulso en los cuadrantes I y III sin fallas a bajas temperaturas.
-   * Para sostener esta corriente impulsiva sin caída de tensión en la lógica, el filtro principal **`C_VCC1`** en los pines 9/10 se fijó en **$220\text{ }\mu\text{F} / 25\text{ V}$** (con huella de $10\text{ mm}$ compatible también con **$470\text{ }\mu\text{F} / 25\text{ V}$**), logrando una tensión regulada de **$15.24\text{ V}$** con $0.43\text{ Vpp}$ de rizado.
-2. **Escalado de Velocidad ($400\text{ RPM}$ a $2.500\text{ RPM}$) y Calibración Fina:**
-   * La bomba de carga en el Pin 11 utiliza **`C11` de $470\text{ pF}$ a $1\text{ nF}$** (polipropileno/NP0) junto con $R_{11} = 470\text{ k}\Omega$ a $+V_{CC}$ y el integrador del Pin 4 ($R_4 = 270\text{ k}\Omega \parallel C_4 = 470\text{ nF}$), generando **$3.07\text{ V}$** (con $470\text{ pF}$) o **$5.14\text{ V}$** (con $1\text{ nF}$) a la velocidad tope de $2.500\text{ RPM}$.
-   * En serie con el extremo superior del potenciómetro de panel de $10\text{ k}\Omega$ (`J2`) se incorporó un **preset multivuelta de $50\text{ k}\Omega$ (`RV1`, Bourns 3296W)** hacia $+V_{CC}$ (Pin 9) y un resistor de piso **`R_MIN1` ($2.2\text{ k}\Omega$)** hacia `GND_CHIP` (Pin 8). Esto permite calibrar con exactitud en placa las **$2.500\text{ RPM}$ máximas** al $100\%$ del potenciómetro y mantener **$400\text{ RPM}$ mínimas** al $0\%$ del recorrido.
-3. **Protección del Tacómetro y Red Snubber:**
-   * Después de la resistencia limitadora $R_{12} = 10\text{ k}\Omega$ del tacómetro (Pin 12), se incluyó el capacitor cerámico **`C12` de $10\text{ nF}$** en paralelo a masa (`GND_CHIP`) para filtrar picos inductivos y ruido de escobillas ($f_c = 1.59\text{ kHz}$).
-   * Pese a que el `BTB12-600BW` es Snubberless, el PCB conserva las huellas de la red Snubber RC (**`R_SNUB1` = $100\text{ }\Omega\text{ 1 W}$ + `C_SNUB1` = $100\text{ nF 400 V X2}$**) en paralelo entre `MT1` y `MT2` para amortiguar el chispazo del colector del motor universal.
+| Esquemático (`.asc`) | Netlist (`.net`) | Resultados (`.log`) | Descripción |
+| :--- | :--- | :--- | :--- |
+| [`etapa2_lazo_pi_conversor_fv.asc`](Simulations/etapa2_lazo_pi_conversor_fv.asc) | [`etapa2_lazo_pi_conversor_fv.net`](Simulations/etapa2_lazo_pi_conversor_fv.net) | [`etapa2_lazo_pi_conversor_fv.log`](Simulations/etapa2_lazo_pi_conversor_fv.log) | **Conversor F/V y Lazo PI (Pines 12, 11, 4, 5 y 16):** Tacómetro real ($R_{\text{tacho}}=73.0\text{ }\Omega$, $8$ polos, $166.6\text{ Hz}$ a $2.500\text{ RPM}$), filtro $10\text{ k}\Omega + 10\text{ nF}$, bomba de carga $C_{11}=1\text{ nF}$, integrador $R_4=270\text{ k}\Omega \parallel 470\text{ nF}$ y respuesta dinámica del compensador PI ($47\text{ k}\Omega + 1\text{ }\mu\text{F} \parallel 47\text{ nF}$) ante escalón de carga de perforación. |
+| [`tda1085c_controlador_completo_btb12.asc`](Simulations/tda1085c_controlador_completo_btb12.asc) | [`tda1085c_controlador_completo_btb12.net`](Simulations/tda1085c_controlador_completo_btb12.net) | [`tda1085c_controlador_completo_btb12.log`](Simulations/tda1085c_controlador_completo_btb12.log) | **Modelo Maestro Completo:** Fuente sin transformador ($2\times 4.7\text{ k}\Omega\text{ 3W} + 220\text{ }\mu\text{F}$), disparo de Gate ($150\text{ }\Omega\text{ 1W}$, $87.9\text{ mA pk}$), motor serie con Estator ($2.1\text{ }\Omega + 15\text{ mH}$) + Puente Pin 1–Pin 2 + Rotor ($6.5\text{ }\Omega + 13\text{ mH} + \text{FEM}$) y Triac `BTB12-600BW`. |
+| [`etapa1a_fuente_tda1085c.asc`](Simulations/etapa1a_fuente_tda1085c.asc) | [`etapa1a_fuente_tda1085c.net`](Simulations/etapa1a_fuente_tda1085c.net) | [`etapa1a_fuente_tda1085c.log`](Simulations/etapa1a_fuente_tda1085c.log) | Evaluación térmica y de rizado de la fuente sin transformador. |
+| [`etapa1b_conversor_fv_tacho.asc`](Simulations/etapa1b_conversor_fv_tacho.asc) | [`etapa1b_conversor_fv_tacho.net`](Simulations/etapa1b_conversor_fv_tacho.net) | [`etapa1b_conversor_fv_tacho.log`](Simulations/etapa1b_conversor_fv_tacho.log) | Comparativa del conversor F/V a $400\text{ RPM}$ ($26.67\text{ Hz}$) y $2.500\text{ RPM}$ ($166.6\text{ Hz}$) con $R_{\text{tacho}} = 73.0\text{ }\Omega$. |
+| [`etapa1c_triac_snubber_motor.asc`](Simulations/etapa1c_triac_snubber_motor.asc) | [`etapa1c_triac_snubber_motor.net`](Simulations/etapa1c_triac_snubber_motor.net) | [`etapa1c_triac_snubber_motor.log`](Simulations/etapa1c_triac_snubber_motor.log) | Conmutación inductiva con $R_{\text{tot}} = 8.6\text{ }\Omega$ y $L_{\text{tot}} = 28\text{ mH}$. |
 
 ---
 
-## 4. Reglas Críticas de Diseño PCB (DRC) Implementadas en KiCad
+## 4. Reglas Críticas de Diseño PCB (DRC) en KiCad
 
-El diseño en [`Hardware/TDA1085C_Controller/`](Hardware/TDA1085C_Controller/) incorpora cuatro reglas de diseño físico obligatorias:
-
-1. **Clearance de Alta Tensión ($> 3.0\text{ mm}$):** La clase de red `HV_AC` (`L2_AC_HOT`, `MT2`, `N_RECT`, `N_DROP_MID`, `N_SNUB`) está físicamente segregada en la mitad izquierda del PCB, separada por una **barrera de aislación libre de cobre $> 3.5\text{ mm}$** (definida en [`TDA1085C_Controller.kicad_pro`](Hardware/TDA1085C_Controller/TDA1085C_Controller.kicad_pro) y [`TDA1085C_Controller.kicad_dru`](Hardware/TDA1085C_Controller/TDA1085C_Controller.kicad_dru)) respecto a toda la sección lógica referenciada a `GND_CHIP`.
-2. **Topología de Masa en Estrella (*Star Ground*):** El neutro de potencia `L1` ingresa desde la bornera `J1` por una pista de $3.0\text{ mm}$ de ancho directamente al pad **`MT1` (Pin 1)** del Triac `Q1`. **Desde ese pad `MT1` nace una única pista dedicada hacia el Pin 8 (`GND_CHIP`) del `TDA1085C`**, impidiendo que la corriente de $1.5\text{–}3.5\text{ A}$ del motor circule por debajo del integrado.
-3. **Manejo Térmico de Resistencias de Caída ($2 \times 4.7\text{ k}\Omega\text{ 3 W}$):** Las resistencias `R_DROP1` y `R_DROP2` (que disipan $1.13\text{ W}$ cada una) utilizan el footprint dedicado [`R_Axial_3W_Elevated_Pad2.5mm_Drill1.2mm`](Hardware/TDA1085C_Controller/TDA1085C_Custom.pretty/R_Axial_3W_Elevated_Pad2.5mm_Drill1.2mm.kicad_mod) con **pads circulares de $2.5\text{ mm}$ y perforación de $1.2\text{ mm}$**, diseñadas para soldarse a **$5\text{ mm}$ de altura sobre el PCB** favoreciendo la convección natural de aire.
-4. **Filtrado de Picos Inductivos en Tacómetro:** Huella de `C12` ($10\text{ nF}$ cerámico disco, paso $5.0\text{ mm}$) ubicada inmediatamente junto a la entrada del Pin 12 del `TDA1085C` tras `R12` ($10\text{ k}\Omega$).
+1. **Clearance de Alta Tensión ($> 3.0\text{ mm}$):** Separación física $> 3.5\text{ mm}$ entre las pistas `HV_AC` (`L2_AC_HOT`, `MT2`) y toda la sección lógica referenciada a `GND_CHIP`.
+2. **Topología de Masa en Estrella (*Star Ground*):** La pista gruesa de `L1` ($220\text{ V}$) entra al pad `MT1` del Triac `Q1`. Desde ese pad sale **UNA ÚNICA pista** hacia el Pin 8 del `TDA1085C`, evitando bucles de corriente de armadura bajo el integrado.
+3. **Manejo Térmico en PCB:** Las dos resistencias de caída ($4.7\text{ k}\Omega\text{ 3 W}$) cuentan con pads de **$2.5\text{ mm}$ (agujero $1.2\text{ mm}$)** en [`R_Axial_3W_Elevated_Pad2.5mm_Drill1.2mm.kicad_mod`](Hardware/TDA1085C_Controller/TDA1085C_Custom.pretty/R_Axial_3W_Elevated_Pad2.5mm_Drill1.2mm.kicad_mod) para ser montadas a **$5\text{ mm}$ de altura sobre el PCB**.
+4. **Protección del Tacómetro:** Huella para el capacitor cerámico `C12` ($10\text{ nF}$) en paralelo con la entrada del Pin 12 (después de `R12` = $10\text{ k}\Omega$) para absorber picos inductivos.
 
 ---
 
-## 5. Lista de Materiales Final (BOM)
+## 5. Lista de Materiales Definitiva (BOM)
 
-También disponible en formato CSV para importación directa en [`Hardware/BOM_KiCad.csv`](Hardware/BOM_KiCad.csv).
+Sincronizada con [`Hardware/BOM_KiCad.csv`](Hardware/BOM_KiCad.csv):
 
-| Referencia | Cant. | Valor / Especificación | Función en el Circuito | Encapsulado / Footprint KiCad | Notas de Montaje / Origen |
+| Referencia | Cant. | Valor / Especificación | Función en el Circuito | Footprint KiCad | Notas de Montaje / Parámetros |
 | :--- | :---: | :--- | :--- | :--- | :--- |
-| **`U1`** | 1 | **`TDA1085C`** | Controlador de velocidad a lazo cerrado PI | `DIP-16_W7.62mm_Socket_LongPads` | Montar sobre zócalo DIP-16 torneado |
-| **`Q1`** | 1 | **`BTB12-600BW`** | Triac $12\text{ A }600\text{ V}$ Snubberless ($I_{GT}=50\text{ mA}$) | `TO-220-3` + Disipador $40\times 20\times 80\text{ mm}$ | **Reutilizado. ¡ALETA VIVA EN MT2! Aislar del chasis** |
-| **`D1`** | 1 | **`1N4007`** | Rectificador media onda ($1000\text{ V }1\text{ A}$) | `D_DO-41_SOD81_P10.16mm` | Fuente sin transformador |
-| **`R_DROP1, R_DROP2`** | 2 | **$4.7\text{ k}\Omega\text{ / 3 W}$** | Caída de tensión AC a $+V_{CC}$ ($9.4\text{ k}\Omega$ total) | `R_Axial_3W_Elevated_Pad2.5mm_Drill1.2mm` | Metal Oxide (MOX). **Montar a $5\text{ mm}$ sobre el PCB** |
-| **`R_GATE1`** | 1 | **$150\text{ }\Omega\text{ / 1 W}$** | Limitadora de pulso de Gate ($I_{G,\text{pk}} \approx 88\text{ mA}$) | `R_Axial_DIN0411_P12.70mm` | Admite $120\text{ }\Omega\text{ a }150\text{ }\Omega\text{ (1 W)}$ para $I_{GT}=50\text{ mA}$ |
-| **`R_SNUB1`** | 1 | **$100\text{ }\Omega\text{ / 1 W}$** | Amortiguación red Snubber RC (`MT1-MT2`) | `R_Axial_DIN0411_P12.70mm` | Reutilizada de placa donante / MOX anti-inductiva |
-| **`C_SNUB1`** | 1 | **$100\text{ nF / 400 V (275 Vac X2)}$** | Capacitor de seguridad red Snubber RC | `C_Rect_L18.0mm_W6.0mm_P15.00mm` | Polipropileno Clase X2 (reutilizado) |
-| **`C_VCC1`** | 1 | **$220\text{ }\mu\text{F / 25 V}$** (o $470\text{ }\mu\text{F / 25 V}$) | Filtro electrolítico principal de $+V_{CC}$ (Pin 9/10) | `CP_Radial_D10.0mm_P5.00mm` | Sostiene picos de Gate de $50\text{–}90\text{ mA}$ ($105^\circ\text{C}$) |
-| **`C_DEC1, C3, C5`** | 3 | **$100\text{ nF / 50 V}$** | Desacoplo $+V_{CC}$, filtro `I_LIM` (Pin 3) y `V_SET` (Pin 5) | `C_Disc_D5.0mm_W2.5mm_P5.00mm` | Cerámico multicapa / disco X7R |
-| **`C12`** | 1 | **$10\text{ nF / 50 V}$** | Protección contra picos inductivos en Tacómetro (Pin 12) | `C_Disc_D5.0mm_W2.5mm_P5.00mm` | En paralelo tras $R_{12}$ hacia `GND_CHIP` |
-| **`C11`** | 1 | **$470\text{ pF}$ a $1\text{ nF / 100 V}$** | Bomba de carga conversor F/V (Pin 11) | `C_Rect_L7.2mm_W3.5mm_P5.00mm` | Film polipropileno (FKP2/MKP2) o cerámico NP0/C0G |
-| **`C4`** | 1 | **$470\text{ nF / 63 V}$** | Filtro integrador de velocidad real en Pin 4 | `C_Rect_L7.2mm_W3.5mm_P5.00mm` | Poliéster metalizado (MKS2) |
-| **`C7`** | 1 | **$4.7\text{ }\mu\text{F / 50 V}$** | Rampa de arranque suave (*Soft-Start*, Pin 7) | `CP_Radial_D6.3mm_P2.50mm` | Electrolítico radial |
-| **`C14`** | 1 | **$47\text{ nF / 63 V}$** | Generador diente de sierra $100\text{ Hz}$ (Pin 14) | `C_Rect_L7.2mm_W3.5mm_P5.00mm` | Poliéster metalizado (estable en temperatura) |
-| **`C16`** | 1 | **$1\text{ }\mu\text{F / 50 V}$** | Compensación integral del lazo PI (Pin 16) | `CP_Radial_D6.3mm_P2.50mm` | Electrolítico o film en serie con `R16` |
-| **`C17`** | 1 | **$47\text{ nF / 50 V}$** | Polo de alta frecuencia del lazo PI (Pin 16) | `C_Disc_D5.0mm_W2.5mm_P5.00mm` | Cerámico o film en paralelo a `GND_CHIP` |
-| **`RV1`** | 1 | **Preset $50\text{ k}\Omega$ Multivuelta** | Calibración fina del tope de $2.500\text{ RPM}$ | `Potentiometer_Bourns_3296W_Vertical` | En serie con el potenciómetro de panel de $10\text{ k}\Omega$ |
-| **`RV_PANEL` (Ext.)** | 1 | **Potenciómetro $10\text{ k}\Omega$ Lineal (B)** | Control manual de velocidad ($400\text{–}2.500\text{ RPM}$) | Conectado a `J2` (`PinHeader_1x03_P2.54mm`) | Montaje en panel con perilla plástica aislada |
-| **`R_MIN1`** | 1 | **$2.2\text{ k}\Omega\text{ / 1/4 W}$** | Piso de consigna ($400\text{ RPM}$ al $0\%$ del potenciómetro) | `R_Axial_DIN0207_P10.16mm` | Evita que Pin 5 caiga debajo de $80\text{ mV}$ |
-| **`R1, R2`** | 2 | **$820\text{ k}\Omega\text{ / 1/2 W}$** | Sincronismo de corriente (`MT2` $\rightarrow$ Pin 1) y tensión (`L2` $\rightarrow$ Pin 2) | `R_Axial_DIN0411_P12.70mm` | Cuerpo de alta tensión ($> 350\text{ V}$ de trabajo) |
-| **`R3, R12`** | 2 | **$10\text{ k}\Omega\text{ / 1/4 W}$** | Referencia Pin 3 (`I_LIM`) y limitadora de Tacómetro (Pin 12) | `R_Axial_DIN0207_P10.16mm` | Película metálica $1\%$ |
-| **`R4, R15`** | 2 | **$270\text{ k}\Omega\text{ / 1/4 W}$** | Ganancia F/V en Pin 4 y corriente de rampa en Pin 15 | `R_Axial_DIN0207_P10.16mm` | Película metálica $1\%$ (en `R4` admite $270\text{–}330\text{ k}\Omega$) |
-| **`R11`** | 1 | **$470\text{ k}\Omega\text{ / 1/4 W}$** | Polarización bomba de carga Pin 11 hacia $+V_{CC}$ | `R_Axial_DIN0207_P10.16mm` | Película metálica $1\%$ |
-| **`R16`** | 1 | **$47\text{ k}\Omega\text{ / 1/4 W}$** | Ganancia proporcional del compensador PI (Pin 16) | `R_Axial_DIN0207_P10.16mm` | Película metálica $1\%$ |
-| **`J1`** | 1 | **Bornera 4 Polos ($5.08\text{ mm}$)** | Conexión de Red $220\text{ V AC}$ (`L1`, `L2`) y Motor (Pines 6 y 7) | `TerminalBlock_Phoenix_MKDS-3-4-5.08` | Corriente nominal $\ge 15\text{ A}$ ($300\text{ V}$) |
-| **`J3`** | 1 | **Bornera 2 Polos ($5.08\text{ mm}$)** | Entrada del generador tacométrico (Pines 3 y 4 del motor) | `TerminalBlock_Phoenix_MKDS-1,5-2-5.08` | Cables rojos del tacómetro |
-| **`J2`** | 1 | **Header 3 Pines ($2.54\text{ mm}$)** | Conector para potenciómetro de panel ($10\text{ k}\Omega$) | `PinHeader_1x03_P2.54mm_Vertical` | Pin 1: Tope (`RV1`), Pin 2: Cursor (Pin 5), Pin 3: Piso (`R_MIN1`) |
-| **Filtro EMI (Ext.)** | 1 | **`FLCR47050` ($250\text{ V }16\text{ A}$)** | Filtro EMI de línea previo a la placa + Fusible $4\text{ A}$ | Montaje en chasis | Reutilizado del lavarropas donante |
-
----
-
-## 6. Cómo Ejecutar las Simulaciones y Abrir el Proyecto KiCad
-
-### En LTspice:
-1. Abrir [`Simulations/tda1085c_controlador_completo_btb12.asc`](Simulations/tda1085c_controlador_completo_btb12.asc) en **LTspice**.
-2. Presionar **Run** (`Alt+R`) y abrir el registro de mediciones con `Ctrl+L` ([`tda1085c_controlador_completo_btb12.log`](Simulations/tda1085c_controlador_completo_btb12.log)) para inspeccionar:
-   * `vcc_avg = 15.24 V` ($\text{rizado } 0.43\text{ Vpp}$) con $C_{\text{VCC}} = 220\text{ }\mu\text{F}$.
-   * `i_gate_pk_ma = 87.88 mA` sobre $R_G = 150\text{ }\Omega\text{ (1 W)}$ hacia el `BTB12-600BW`.
-   * `vpin4_470p_2500rpm = 3.07 V` vs. `vpin4_1n_2500rpm = 5.14 V` a $2.500\text{ RPM}$.
-
-### En KiCad 10.0:
-1. Abrir [`Hardware/TDA1085C_Controller/TDA1085C_Controller.kicad_pro`](Hardware/TDA1085C_Controller/TDA1085C_Controller.kicad_pro).
-2. Revisar el esquemático ([`TDA1085C_Controller.kicad_sch`](Hardware/TDA1085C_Controller/TDA1085C_Controller.kicad_sch)) y el diseño de PCB ([`TDA1085C_Controller.kicad_pcb`](Hardware/TDA1085C_Controller/TDA1085C_Controller.kicad_pcb)), donde ya se encuentran cargadas las huellas personalizadas de las resistencias de $3\text{ W}$ elevadas (`Pad 2.5mm / Drill 1.2mm`), el conjunto `BTB12-600BW` con disipador de $40\times 20\times 80\text{ mm}$, el ruteo *Star Ground* desde `MT1` y la barrera de aislación $> 3.0\text{ mm}$.
+| **`U1`** | 1 | **`TDA1085C`** | Controlador de velocidad a lazo cerrado PI | `Package_DIP:DIP-16_W7.62mm_Socket_LongPads` | Montar sobre zócalo DIP-16 |
+| **`Q1`** | 1 | **`BTB12-600BW`** | Triac $12\text{ A }600\text{ V}$ Snubberless ($I_{GT}=50\text{ mA}$) | `TDA1085C_Custom:BTB12-600BW_Heatsink_40x20x80mm_LIVE_TAB` | **¡ALETA VIVA EN MT2! Aislar del chasis** |
+| **`D1`** | 1 | **`1N4007`** | Rectificador de media onda ($1000\text{ V }1\text{ A}$) | `Diode_THT:D_DO-41_SOD81_P10.16mm_Horizontal` | Fuente sin transformador |
+| **`R_DROP1, R_DROP2`** | 2 | **$4.7\text{ k}\Omega\text{ / 3 W}$** | Caída de tensión AC a $+V_{CC}$ ($9.4\text{ k}\Omega$ serie) | `TDA1085C_Custom:R_Axial_3W_Elevated_Pad2.5mm_Drill1.2mm` | MOX. **Montar a $5\text{ mm}$ sobre el PCB** |
+| **`R_GATE1`** | 1 | **$150\text{ }\Omega\text{ / 1 W}$** | Limitadora de pulso de Gate ($88\text{ mA pk}$) | `Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal` | Garantiza disparo para $I_{GT}=50\text{ mA}$ |
+| **`R_SNUB1`** | 1 | **$100\text{ }\Omega\text{ / 1 W}$** | Amortiguación red Snubber RC (`MT1-MT2`) | `Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal` | Protección ante chispazo de escobillas |
+| **`C_SNUB1`** | 1 | **$100\text{ nF / 400 V X2}$** | Capacitor de seguridad red Snubber RC | `Capacitor_THT:C_Rect_L18.0mm_W6.0mm_P15.00mm_FKS3_FKP3` | Polipropileno Clase X2 ($275\text{ Vac}$) |
+| **`C_VCC1`** | 1 | **$220\text{ }\mu\text{F / 25 V}$** | Filtro electrolítico principal de $+V_{CC}$ (Pin 9/10) | `Capacitor_THT:CP_Radial_D10.0mm_P5.00mm` | Compatible con $220\text{ }\mu\text{F}$ o $470\text{ }\mu\text{F / 25 V}$ |
+| **`C_DEC1, C3, C5`** | 3 | **$100\text{ nF / 50 V}$** | Desacoplo $+V_{CC}$, filtro `I_LIM` (Pin 3) y `V_SET` (Pin 5) | `Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm` | Cerámico X7R |
+| **`C12`** | 1 | **$10\text{ nF / 50 V}$** | Protección contra picos inductivos en Tacómetro (Pin 12) | `Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm` | En paralelo tras `R12` a `GND_CHIP` |
+| **`C11`** | 1 | **$1\text{ nF}$** (o $470\text{ pF}$) | Bomba de carga conversor F/V (Pin 11, $166.6\text{ Hz}$ max) | `Capacitor_THT:C_Rect_L7.2mm_W3.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2` | Film polipropileno (FKP2/MKP2) o NP0 |
+| **`C4`** | 1 | **$470\text{ nF / 63 V}$** | Integrador de velocidad real en Pin 4 ($5.14\text{ V} @ 2.500\text{ RPM}$) | `Capacitor_THT:C_Rect_L7.2mm_W3.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2` | Poliéster metalizado (MKS2) |
+| **`C7`** | 1 | **$4.7\text{ }\mu\text{F / 50 V}$** | Rampa de arranque suave (*Soft-Start*, Pin 7) | `Capacitor_THT:CP_Radial_D6.3mm_P2.50mm` | Electrolítico radial |
+| **`C14`** | 1 | **$47\text{ nF / 63 V}$** | Generador diente de sierra $100\text{ Hz}$ (Pin 14) | `Capacitor_THT:C_Rect_L7.2mm_W3.5mm_P5.00mm_FKS2_FKP2_MKS2_MKP2` | Poliéster metalizado (MKS2) |
+| **`C16`** | 1 | **$1\text{ }\mu\text{F / 50 V}$** | Compensación integral del lazo PI (Pin 16, $\tau_i = 47\text{ ms}$) | `Capacitor_THT:CP_Radial_D6.3mm_P2.50mm` | En serie con `R16` ($47\text{ k}\Omega$) |
+| **`C17`** | 1 | **$47\text{ nF / 50 V}$** | Polo de alta frecuencia del lazo PI (Pin 16, $f_p = 72\text{ Hz}$) | `Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm` | En paralelo entre Pin 16 y `GND_CHIP` |
+| **`RV1`** | 1 | **Preset $50\text{ k}\Omega$ Multivuelta** | Calibración fina del tope de $2.500\text{ RPM}$ ($\approx 24.1\text{ k}\Omega$) | `Potentiometer_THT:Potentiometer_Bourns_3296W_Vertical` | En serie con potenciómetro de panel |
+| **`RV_PANEL`** | 1 | **Pot. $10\text{ k}\Omega$ Lineal (B)** | Regulación manual de velocidad ($400\text{–}2.500\text{ RPM}$) | Conectado a `J2` (`PinHeader_1x03_P2.54mm_Vertical`) | Montaje en panel con perilla aislada |
+| **`R_MIN1`** | 1 | **$2.2\text{ k}\Omega\text{ / 1/4 W}$** | Piso de consigna ($400\text{ RPM}$ al $0\%$ del potenciómetro) | `Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | Evita $V_{\text{Pin 5}} < 80\text{ mV}$ |
+| **`R1, R2`** | 2 | **$820\text{ k}\Omega\text{ / 1/2 W}$** | Sincronismo de corriente (`MT2` $\rightarrow$ Pin 1) y tensión (`L2` $\rightarrow$ Pin 2) | `Resistor_THT:R_Axial_DIN0411_L9.9mm_D3.6mm_P12.70mm_Horizontal` | Alta tensión ($> 350\text{ V}$) |
+| **`R3, R12`** | 2 | **$10\text{ k}\Omega\text{ / 1/4 W}$** | Referencia Pin 3 (`I_LIM`) y limitadora de Tacómetro (Pin 12) | `Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | Metal film $1\%$ |
+| **`R4, R15`** | 2 | **$270\text{ k}\Omega\text{ / 1/4 W}$** | Ganancia F/V en Pin 4 y corriente de rampa en Pin 15 | `Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | Metal film $1\%$ |
+| **`R11`** | 1 | **$470\text{ k}\Omega\text{ / 1/4 W}$** | Polarización bomba de carga Pin 11 hacia $+V_{CC}$ | `Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | Metal film $1\%$ |
+| **`R16`** | 1 | **$47\text{ k}\Omega\text{ / 1/4 W}$** | Ganancia proporcional del compensador PI (Pin 16, $K_p=16$) | `Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal` | Metal film $1\%$ |
+| **`J1`** | 1 | **Bornera 4P ($5.08\text{ mm}$)** | `1:L1_MT1`, `2:MT2_MOT_PIN6(Azul)`, `3:L2_MOT_PIN5(Negro)`, `4:L2_AC_HOT` | `TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-3-4-5.08_1x04_P5.08mm_Horizontal` | $\ge 15\text{ A} / 300\text{ V}$ |
+| **`J3`** | 1 | **Bornera 2P ($5.08\text{ mm}$)** | Entrada Tacómetro **Pines 3 y 4 Rojos** ($73.0\text{ }\Omega$, $8$ polos) | `TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal` | Paso $5.08\text{ mm}$ |
+| **`J2`** | 1 | **Header 3P ($2.54\text{ mm}$)** | Conector a potenciómetro de panel de $10\text{ k}\Omega$ | `Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical` | Paso $2.54\text{ mm}$ |
+| **`M1` (Ext.)** | 1 | **Motor `C.E.SET. MCA 52/64`** | $R_{\text{est(P1-P5)}}=2.1\text{ }\Omega$, $R_{\text{rot(P2-P6)}}=6.5\text{ }\Omega$, $R_{\text{tot}}=8.6\text{ }\Omega$, $L=25\text{–}30\text{ mH}$ | Bornera de 7 Pines (Puente Pin 1 Gris osc. con Pin 2 Violeta) | Tacómetro $73.0\text{ }\Omega$, $8$ polos ($166.6\text{ Hz} @ 2.500\text{ RPM}$) |

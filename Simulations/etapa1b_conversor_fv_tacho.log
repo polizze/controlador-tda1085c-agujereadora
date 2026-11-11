@@ -1,25 +1,25 @@
 LTspice 26.1.1 for Windows
-Circuit: D:\Tomás\Desktop\all\utn\máquinas\etapa1b_conversor_fv_tacho.net
-Start Time: Wed Nov 11 00:13:29 2026
+Circuit: D:\TomÃƒÂ¡s\Desktop\all\utn\mÃƒÂ¡quinas\Simulations\etapa1b_conversor_fv_tacho.net
+Start Time: Wed Nov 11 13:22:27 2026
 solver = Normal
 Maximum thread count: 12
 tnom = 27
 temp = 27
 method = trap
 Direct Newton iteration succeeded in finding operating point.
-Total elapsed time: 0.385 seconds.
-Total iterations: 138223
+Total elapsed time: 0.339 seconds.
+Total iterations: 143884
 
 Files loaded:
-D:\Tomás\Desktop\all\utn\máquinas\etapa1b_conversor_fv_tacho.net
-C:\Users\Tomás\AppData\Local\LTspice\lib\cmp\standard.dio
+D:\TomÃƒÂ¡s\Desktop\all\utn\mÃƒÂ¡quinas\Simulations\etapa1b_conversor_fv_tacho.net
+C:\Users\TomÃƒÂ¡s\AppData\Local\LTspice\lib\cmp\standard.dio
 
-vpin12_2500_max: MAX(V(PIN12_2500))=2.54804396629 FROM 0.8 TO 1.2
-vpin12_400_max: MAX(V(PIN12_400))=1.13665473461 FROM 0.8 TO 1.2
-vpin11_2500_max: MAX(V(PIN11_2500))=13.8986110687 FROM 0.8 TO 1.2
+vpin12_2500_max: MAX(V(PIN12_2500))=8.79115962982 FROM 0.8 TO 1.2
+vpin12_400_max: MAX(V(PIN12_400))=1.41369783878 FROM 0.8 TO 1.2
+vpin11_2500_max: MAX(V(PIN11_2500))=13.8986120224 FROM 0.8 TO 1.2
 vpin11_2500_min: MIN(V(PIN11_2500))=3.10702967644 FROM 0.8 TO 1.2
-vpin4_2500_opt_avg: AVG(V(PIN4_2500_OPT))=6.34896652146 FROM 0.8 TO 1.2
-vpin4_2500_opt_pp: PP(V(PIN4_2500_OPT))=0.263809204102 FROM 0.8 TO 1.2
-vpin4_400_opt_avg: AVG(V(PIN4_400_OPT))=1.20371221731 FROM 0.8 TO 1.2
-vpin4_400_opt_pp: PP(V(PIN4_400_OPT))=0.238365769386 FROM 0.8 TO 1.2
-vpin4_2500_orig68k_avg: AVG(V(PIN4_2500_68K_ORIG))=1.3108100745 FROM 0.8 TO 1.2
+vpin4_2500_opt_avg: AVG(V(PIN4_2500_OPT))=6.2733306049 FROM 0.8 TO 1.2
+vpin4_2500_opt_pp: PP(V(PIN4_2500_OPT))=0.262920379639 FROM 0.8 TO 1.2
+vpin4_400_opt_avg: AVG(V(PIN4_400_OPT))=1.18765805414 FROM 0.8 TO 1.2
+vpin4_400_opt_pp: PP(V(PIN4_400_OPT))=0.238353133202 FROM 0.8 TO 1.2
+vpin4_2500_orig68k_avg: AVG(V(PIN4_2500_68K_ORIG))=1.29515319613 FROM 0.8 TO 1.2

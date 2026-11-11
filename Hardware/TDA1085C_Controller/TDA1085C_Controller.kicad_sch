@@ -7,11 +7,11 @@
   (title_block
     (title "Controlador TDA1085C para Agujereadora de Banco (Acople Directo)")
     (date "2026-11-11")
-    (rev "2.0")
+    (rev "2.1")
     (company "UTN - Hardware Libre")
-    (comment 1 "Motor Universal Askoll MCA 52/64-148/ALL7 (400 - 2500 RPM)")
-    (comment 2 "Triac BTB12-600BW (No Aislado, I_GT=50mA, R_G=150R 1W, C_VCC=220uF)")
-    (comment 3 "DRC: Clearance >3.0mm HV_AC a GND_CHIP | Star Ground en Pad MT1")
+    (comment 1 "Motor C.E.SET. MCA 52/64: R_est(P1-P5)=2.1R + R_rot(P2-P6)=6.5R = 8.6R | Tacho(P3-P4)=73.0R 8P")
+    (comment 2 "Serie: Puente P1(Gris osc)-P2(Violeta) | MOTOR_OUT: P5(Negro)->L2_AC_HOT, P6(Azul)->MT2")
+    (comment 3 "Triac BTB12-600BW (No Aislado, I_GT=50mA, R_G=150R 1W) | DRC: Clearance >3.0mm | Star Ground MT1")
   )
   (lib_symbols
     (symbol "Custom:R" (pin_numbers (hide yes)) (pin_names (offset 0)) (in_bom yes) (on_board yes)
@@ -125,8 +125,8 @@
       )
       (symbol "Conn_01x04_1_1"
         (pin passive line (at -5.08 3.81 0) (length 2.54) (name "L1_MT1" (effects (font (size 1.27 1.27)))) (number "1" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -5.08 1.27 0) (length 2.54) (name "MT2_MOT7" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
-        (pin passive line (at -5.08 -1.27 0) (length 2.54) (name "L2_MOT6" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -5.08 1.27 0) (length 2.54) (name "MT2_MOT_PIN6" (effects (font (size 1.27 1.27)))) (number "2" (effects (font (size 1.27 1.27)))))
+        (pin passive line (at -5.08 -1.27 0) (length 2.54) (name "L2_MOT_PIN5" (effects (font (size 1.27 1.27)))) (number "3" (effects (font (size 1.27 1.27)))))
         (pin passive line (at -5.08 -3.81 0) (length 2.54) (name "L2_AC_HOT" (effects (font (size 1.27 1.27)))) (number "4" (effects (font (size 1.27 1.27)))))
       )
     )
@@ -157,7 +157,7 @@
       )
     )
   )
-  (text "CONTROLADOR DE VELOCIDAD LAZO CERRADO TDA1085C - AGUJEREADORA DE BANCO (ACOPLE DIRECTO)\nMotor: Askoll C.E.SET. MCA 52/64-148/ALL7 (220V 50Hz, 330W, Tacometro 60-180R)\nTriac: BTB12-600BW (I_GT=50mA, ALETA VIVA NO AISLADA CONECTADA A MT2 - AISLAR DEL CHASIS)\nRango: 400 a 2.500 RPM (Preset 50k multivuelta RV1 en serie con Potenciometro 10k de panel)\nStar Ground: L1 entra a MT1 de Q1 y sale en pista unica hacia Pin 8 (GND_CHIP)"
+  (text "CONTROLADOR DE VELOCIDAD LAZO CERRADO TDA1085C - AGUJEREADORA DE BANCO (ACOPLE DIRECTO)\nMotor C.E.SET. MCA 52/64-148/ALL7 (Medido: R_estator[P1-P5]=2.1R + R_rotor[P2-P6]=6.5R = 8.6R, L=25-30mH, Tacho[P3-P4]=73.0R 8P 166.6Hz@2500RPM)\nBornera 7P (Izq->Der): P1(Gris osc: Campo A) puenteado con P2(Violeta: Carbon Izq) | MOTOR_OUT(J1): P5(Negro: Campo B)->L2_AC_HOT y P6(Azul: Carbon Der)->MT2 | P7(Gris claro: Sin uso)\nTriac: BTB12-600BW (I_GT=50mA, ALETA VIVA NO AISLADA CONECTADA A MT2 - AISLAR DEL CHASIS)\nRango: 400 a 2.500 RPM (Preset 50k multivuelta RV1 en serie con Potenciometro 10k de panel)\nStar Ground: L1 entra a MT1 de Q1 y sale en pista unica hacia Pin 8 (GND_CHIP)"
     (exclude_from_sim no)
     (at 25.4 22.86 0)
     (effects (font (size 2.0 2.0) (bold yes)) (justify left top))
@@ -424,7 +424,7 @@
     (exclude_from_sim no) (in_bom yes) (on_board yes) (dnp no)
     (uuid "2ec39783-a0de-5191-b416-f006cdface24")
     (property "Reference" "J3" (at 142.24 113.03 0) (effects (font (size 1.27 1.27))))
-    (property "Value" "TACHO_MOTOR (Pines 3-4)" (at 142.24 125.73 0) (effects (font (size 1.27 1.27))))
+    (property "Value" "TACHO_P3_P4 (73.0R 8P)" (at 142.24 125.73 0) (effects (font (size 1.27 1.27))))
     (property "Footprint" "TerminalBlock_Phoenix:TerminalBlock_Phoenix_MKDS-1,5-2-5.08_1x02_P5.08mm_Horizontal" (at 142.24 119.38 0) (effects (font (size 1.27 1.27)) (hide yes)))
     (pin "1" (uuid "2812f642-0784-5227-97dc-1a9bd5a8d8e0"))
     (pin "2" (uuid "83f69040-bb5b-5cf5-86cc-b4bcaa2aa282"))
