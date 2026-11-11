@@ -1,0 +1,19 @@
+(version 1)
+
+# =============================================================================
+# Reglas de Diseño Críticas (DRC) - Controlador TDA1085C (220V AC + Lógica)
+# =============================================================================
+
+# Regla 1: Clearance de Alta Tensión (> 3.0 mm) entre pistas de L2_AC_HOT / MT2
+# y toda la sección de control referenciada a GND_CHIP (exceptuando el paso
+# intrínseco entre pines del encapsulado TO-220 de Q1).
+(rule "HV_AC_to_Control_Clearance_3mm"
+  (condition "A.NetClass == 'HV_AC' && B.NetClass != 'HV_AC' && !(A.insideCourtyard('Q1') && B.insideCourtyard('Q1'))")
+  (constraint clearance (min 3.0mm))
+)
+
+# Regla 2: Ancho de pistas de potencia AC (MT1, MT2, L2_AC_HOT)
+(rule "Power_AC_Track_Width"
+  (condition "A.NetName == 'MT2' || A.NetName == 'L2_AC_HOT'")
+  (constraint track_width (min 1.5mm) (opt 2.5mm) (max 5.0mm))
+)

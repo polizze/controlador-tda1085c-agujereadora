@@ -1,0 +1,45 @@
+# =============================================================================
+# .gitignore - Controlador TDA1085C (KiCad + LTspice + OS)
+# =============================================================================
+
+# --- LTspice (Simulations) ---
+*.raw
+*.op.raw
+*.fft
+*.tmp
+*.db
+# Descomentar la siguiente línea si no se desean versionar los logs de medición:
+# *.log
+
+# --- KiCad (Hardware) ---
+# Archivos temporales y de bloqueo
+*.lck
+~*
+_autosave-*
+*.bak
+*.bck
+*.kicad_pcb-bak
+*.kicad_sch-bak
+
+# Configuración local de usuario y caché de footprints
+*.kicad_prl
+fp-info-cache
+sym-lib-table.lock
+fp-lib-table.lock
+
+# Carpetas de respaldos automáticos de KiCad
+*-backups/
+
+# Archivos generados intermedios (conservar exportaciones en Hardware/Fabrication si aplica)
+*.dsn
+*.ses
+
+# --- Sistema Operativo / IDE ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+.vscode/
+.idea/
+__pycache__/
+*.pyc

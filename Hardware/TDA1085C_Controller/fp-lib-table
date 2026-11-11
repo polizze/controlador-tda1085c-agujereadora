@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "TDA1085C_Custom")(type "KiCad")(uri "${KIPRJMOD}/TDA1085C_Custom.pretty")(options "")(descr "Footprints dedicados para Controlador TDA1085C (Resistencias 3W elevadas 2.5mm/1.2mm y BTB12-600BW con Disipador 40x20x80mm)"))
+)
